@@ -1,58 +1,49 @@
 const path = require('path')
 const fs = require('fs')
 const electron = require('electron')
-const mvFile = require('move-file');
-var shell = require('shelljs');
-
-let isFileMoverRunning = false;
-
 const {
     app,
     BrowserWindow
 } = electron;
 
+let isFileMoverRunning = false;
 let toggleOne = document.getElementById('script-one');
 
 toggleOne.addEventListener('click', function () {
-    // console.log('3')
-    // let python = spawn('python', [path.join(__dirname,'..', 'python_scripts/file_mover.py')])
-    // shell.echo(pwd());
-    mv('-p',)
     if (isFileMoverRunning) {
         toggleOne.style.backgroundColor = 'salmon ';
     } else {
         toggleOne.style.backgroundColor = 'LightGreen ';
     }
-
-    // var python = require('child_process').spawn('python', ['./python_scripts/file_mover.py']);
-    // python.stdout.on('data', function (data) {
-    //     console.log("data: ", data.toString('utf8'));
-    // });
-    // python.stderr.on('data', function (data) {
-    //     console.log("data: ", data.toString('utf8'));
-    // });
-    // isFileMoverRunning = !isFileMoverRunning
+    isFileMoverRunning = !isFileMoverRunning
 
 });
 
 fs.watch('/Users/siggelabor/Desktop/folder-to/', (eventType, filename) => {
-    console.log(eventType);
-    if (eventType === 'rename') {
-        let category = getCategory(filename);
-        fs.rename('/Users/siggelabor/Desktop/folder-to/' + filename, '/Users/siggelabor/Desktop/folder-to/images/' + filename, function (err) {
-            if (err){
-                throw err;
-            } 
-        });
+    if (isFileMoverRunning) {
+        if (eventType === 'rename') {
+            let category = getCategory(filename);
+
+            // let user change path
+            let moveFrom = `/Users/siggelabor/Desktop/folder-to/${filename}`
+            let moveTo = `/Users/siggelabor/Desktop/folder-to/${category}/${filename}`
+            fs.rename(moveFrom, moveTo, function (err) {
+                if (err) {
+                    throw err;
+                }
+            });
+        }
     }
 });
 
-function getCategory(filename){
+function getCategory(filename) {
+    let arr = filename.split('.');
+    let type = arr[arr.length - 1];
+    let category = '';
 
-}
-
-function moveFile(moveFrom, moveTo) {
-
-    console.log(moveFrom + ' has been moved to ' + moveTo);
-
+    // fix const arr with filetypes.
+    if (type === 'png' || type === 'jpg') {
+        category = 'images'
+    }
+    return category
 }
