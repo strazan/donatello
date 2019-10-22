@@ -1,0 +1,28 @@
+{
+  "name": "Donatello",
+  "version": "1.0.0",
+  "description": "Automates silly tasks and organizes your machine",
+  "main": "main.js",
+  "devDependencies": {
+    "electron": "^6.0.12",
+    "electron-builder": "^21.2.0"
+  },
+  "build": {
+    "appId": "sigge@labor.cool",
+    "mac": {
+      "category": "scripts",
+      "icon": "icon/icon.png"
+    }
+  },
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "author": "sigge labor",
+  "license": "ISC",
+  "dependencies": {
+    "move-file": "^1.2.0",
+    "shelljs": "^0.8.3"
+  }
+}

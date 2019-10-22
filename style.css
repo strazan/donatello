@@ -1,0 +1,29 @@
+body {
+    margin: 0;
+    padding: 30px 60px;
+    min-width: 300px;
+}
+
+h1 {
+    padding: 0 10px;
+    color: salmon;
+    padding-bottom: 40px;
+}
+
+.wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.script-item {
+    margin: 10px 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 200px;
+    background-color: LightSeaGreen ;
+    height: 80px;
+    color: #fff;
+    font-size: 20px;
+}
