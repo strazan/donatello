@@ -7,7 +7,7 @@ body {
 }
 
 nav {
-   
+
     height: 96vh;
     margin: 3vh 4vw;
     display: flex;
@@ -18,25 +18,24 @@ nav {
 
 nav div {
     height: 10vh;
-    border: 1px solid #ddd;
-    border-bottom: none;
+    border-bottom: 1px solid #ddd;
+    /* border-bottom: none;
     border-left: none;
-    border-right: none;
+    border-right: none; */
     display: flex;
     justify-content: start;
     align-items: start;
 }
 
-nav div:first-child {  
-    border-top: none;
-}
 
 nav div h2 {
     text-decoration: none;
-    color: black;
+    color: rgba(3, 102, 214, 1);
     margin: 0;
-    font-size: 20px;
-  
+    font-size: 18px;
+    font-weight: 400;
+    cursor: pointer;
+
 }
 
 .pref-wrapper {
@@ -48,15 +47,64 @@ nav div h2 {
 .pref-content {
     width: 100%;
     background-color: #fff;
-    
+
 }
 
 .pref-content p {
     margin: 0;
 }
 
+/*
+            ORGANIZE DOWNLOADS
+*/
+
+.org-down-pref__container {
+    display: flex;
+    margin-top: 20px;
+
+}
+
+.org-down-pref__categories {
+    /* height: 90%; */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    /* align-items: space-between; */
+}
+
+#org-down-pref__content {
+    width: 100%;
+    /* height: 100%;  */
+    /* background-color: salmon; */
+    display: flex;
+    flex-direction: column;
+    padding: 65px 0 0 160px;
+}
+
+#org-down-pref__content p{
+    margin: 4px;
+}
+
+.org-down-pref__categories h2 {
+    margin-top: 0;
+    font-size: 19px;
+}
+
+.org-down-pref__categories-item {
+    font-weight: 200;
+    font-size: 16px;
+    width: 80px;
+    padding: 9px 0;
+    color: rgba(3, 102, 214, 1);
+    border-bottom: 1px solid #eee;
+    /* height: 9%; */
+    cursor: pointer;
+    margin: 0;
+    /* margin: auto; */
+}
+
 #orgDownBasePath {
 
-    color: #888;
+    color: rgba(3, 102, 214, 1);
     cursor: pointer;
 }

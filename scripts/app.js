@@ -1,18 +1,27 @@
 const path = require('path')
 const fs = require('fs')
 const electron = require('electron')
+const chokidar = require('chokidar');
+
 const {
     app,
     BrowserWindow,
     dialog
 } = electron;
 
+let prefContent = document.getElementById('org-down-pref__content');
+
 let isFileMoverRunning = true;
 let toggleOne = document.getElementById('script-one');
 let baseFolder = `/Users/siggelabor/Desktop/folder-to/`;
+let watcher = chokidar.watch(baseFolder, {
+    persistent: true
+});
+
+watcherSetUp(watcher);
 
 let labelBasePath = document.getElementById('orgDownBasePath');
-labelBasePath.innerHTML = (baseFolder);
+labelBasePath.innerHTML = baseFolder;
 let labelBasePathInput = document.getElementById('orgDownBasePathInput')
 // toggleOne.addEventListener('click', function () {
 //     isFileMoverRunning = !isFileMoverRunning
@@ -25,41 +34,39 @@ let labelBasePathInput = document.getElementById('orgDownBasePathInput')
 // });
 
 labelBasePath.addEventListener('click', () => {
-
-
-    // dialog.showOpenDialog(mainWindow, {
-    //     properties: ['openDirectory']
-    // })
-
-
     labelBasePathInput.click()
     labelBasePathInput.onchange = function (e) {
-        labelBasePath.innerHTML = labelBasePathInput.value
-
+        baseFolder = labelBasePathInput.files[0].path + '/';
+        labelBasePath.innerHTML = baseFolder;
+        watcher = chokidar.watch(baseFolder, {
+            persistent: true
+        });
+        watcherSetUp(watcher);
     }
-
 })
 
+function watcherSetUp(watcher) {
 
+    watcher.on('ready', () => {
 
+        console.log(`Download Organizer- watcher listening to: ${watcher._closers.keys().next().value}`)
+        watcher.on('add', file => {
+            if (isFileMoverRunning) {
 
+                let filename = file.split('/')[(file.split('/').length) - 1];
+                let category = getCategory(file);
+                let moveFrom = `${baseFolder}${filename}`
+                let moveTo = `${baseFolder}${category}/${filename}`
 
+                moveFile(moveFrom, moveTo, filename, category);
+            }
 
-fs.watch('/Users/siggelabor/Desktop/folder-to/', (eventType, file) => {
-    if (isFileMoverRunning) {
-        if (eventType === 'rename') {
-            let filename = file;
-            let category = getCategory(file);
-            let moveFrom = `${baseFolder}${filename}`
-            let moveTo = `${baseFolder}${category}/${filename}`
-
-            moveFile(moveFrom, moveTo, filename, category);
-        }
-    }
-});
+        });
+    })
+}
 
 function moveFile(from, to, filename, cat) {
-
+    // console.log('moveFile: ', from, to, filename, cat)
     doesFileExist(to, exists => {
         if (exists) {
             newFileName(from, to, filename, cat);
@@ -72,10 +79,10 @@ function moveFile(from, to, filename, cat) {
 function newFileName(moveFrom, moveTo, filename, cat) {
 
     let newName = `${filename.split('.')[0]}-${getRandomID()}.${filename.split('.')[1]}`
+    moveTo = `${baseFolder}${cat}/${newName}`
 
-    doesFileExist(path + '/' + newName, callback => {
+    doesFileExist(moveTo, callback => {
         if (!callback) {
-            moveTo = `/Users/siggelabor/Desktop/folder-to/${cat}/${newName}`
             renameFile(moveFrom, moveTo)
         }
     })
@@ -119,3 +126,12 @@ function getCategory(filename) {
     }
     return category
 }
+
+document.getElementById('orgDoCatImages').addEventListener('click', () => {
+
+    console.log('l')
+    let p = document.createElement('P')
+    let fileType = document.createTextNode('.png')
+    p.appendChild(fileType)
+    prefContent.appendChild(p);
+})
