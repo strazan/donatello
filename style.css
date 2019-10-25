@@ -1,3 +1,10 @@
+@import url('https://rsms.me/inter/inter.css');
+html { font-family: 'Inter', sans-serif; }
+@supports (font-variation-settings: normal) {
+  html { font-family: 'Inter var', sans-serif; }
+}
+
+
 body {
     margin: 0;
     padding: 30px 60px;
@@ -6,7 +13,7 @@ body {
 
 h1 {
     padding: 0 10px;
-    color: salmon;
+    color: black;
     padding-bottom: 40px;
 }
 
@@ -16,14 +23,45 @@ h1 {
     justify-content: space-between;
 }
 
-.script-item {
+.script-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 150px;
+    min-width: 200px;
     margin: 10px 10px;
+    cursor: pointer;
+}
+
+.script-item {
+   
     display: flex;
     justify-content: center;
     align-items: center;
-    min-width: 200px;
-    background-color: LightSeaGreen ;
-    height: 80px;
-    color: #fff;
+   width: 100%;
+    background-color: #fff ;
+    height: 70%;
+    border: 1px solid #444;
+    color: #000;
     font-size: 20px;
+}
+
+.script-item h4 {
+    font-size: 18px;
+    font-weight: 200;
+}
+.script-item__customize {
+    width: 100%;
+    height: auto;
+    /* margin-top: 8px; */
+    padding: 5px 0;
+    text-align: center; 
+
+    font-size: 16px;
+    color: #000;
+    /* border: 1px solid #aaa; */
+    border-top: none;
+    font-weight: 200;
+    text-decoration: none;
 }
