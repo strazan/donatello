@@ -52,6 +52,7 @@ nav div h2 {
 
 .pref-content p {
     margin: 0;
+    
 }
 
 /*
@@ -78,11 +79,14 @@ nav div h2 {
     /* background-color: salmon; */
     display: flex;
     flex-direction: column;
-    padding: 65px 0 0 160px;
+    padding: 85px 0 0 160px;
 }
 
 #org-down-pref__content p{
-    margin: 4px;
+    margin: 5px;
+    padding: 2px;
+    width: 100px;
+    border-bottom: 1px solid #eee;
 }
 
 .org-down-pref__categories h2 {

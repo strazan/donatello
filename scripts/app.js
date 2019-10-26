@@ -11,6 +11,21 @@ const {
 
 let prefContent = document.getElementById('org-down-pref__content');
 
+let categories = [{
+        category: 'Images',
+        filetypes: ['jpg', 'png', 'tiff']
+    },
+    {
+        category: 'Zips',
+        filetypes: ['zip']
+    },
+    {
+        category: 'Documents',
+        filetypes: ['pdf']
+    },
+]
+
+
 let isFileMoverRunning = true;
 let toggleOne = document.getElementById('script-one');
 let baseFolder = `/Users/siggelabor/Desktop/folder-to/`;
@@ -66,7 +81,7 @@ function watcherSetUp(watcher) {
 }
 
 function moveFile(from, to, filename, cat) {
-    // console.log('moveFile: ', from, to, filename, cat)
+
     doesFileExist(to, exists => {
         if (exists) {
             newFileName(from, to, filename, cat);
@@ -128,10 +143,22 @@ function getCategory(filename) {
 }
 
 document.getElementById('orgDoCatImages').addEventListener('click', () => {
-
-    console.log('l')
-    let p = document.createElement('P')
-    let fileType = document.createTextNode('.png')
-    p.appendChild(fileType)
-    prefContent.appendChild(p);
+    updateOrgDownPrefContent(categories[0].filetypes)
 })
+document.getElementById('orgDoCatZips').addEventListener('click', () => {
+    updateOrgDownPrefContent(categories[1].filetypes)
+})
+document.getElementById('orgDoCatDocuments').addEventListener('click', () => {
+    updateOrgDownPrefContent(categories[2].filetypes)
+})
+
+function updateOrgDownPrefContent(fileTypes){
+    prefContent.innerHTML = ''
+    // let fileTypes = categories[0].filetypes
+    for(let i = 0; i < fileTypes.length; i++){
+        let p = document.createElement('P')
+        let fileType = document.createTextNode(`.${fileTypes[i]}`)
+        p.appendChild(fileType)
+        prefContent.appendChild(p);
+    }
+}
