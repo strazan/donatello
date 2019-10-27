@@ -17,11 +17,19 @@ let categories = [{
     },
     {
         category: 'Zips',
-        filetypes: ['zip']
+        filetypes: ['zip', 'rar']
     },
     {
         category: 'Documents',
-        filetypes: ['pdf']
+        filetypes: ['pdf', 'html', 'xml']
+    },
+    {
+        category: 'Audio',
+        filetypes: ['waw', 'mp3']
+    },
+    {
+        category: 'Video',
+        filetypes: ['mov', 'mp4']
     },
 ]
 
@@ -33,7 +41,11 @@ let watcher = chokidar.watch(baseFolder, {
     persistent: true
 });
 
+let orgDownCatAdd = document.getElementById('orgDoCatAdd')
+let orgDownCatInput = document.getElementById('orgDownCatInput')
+
 watcherSetUp(watcher);
+
 
 let labelBasePath = document.getElementById('orgDownBasePath');
 labelBasePath.innerHTML = baseFolder;
@@ -65,6 +77,7 @@ function watcherSetUp(watcher) {
     watcher.on('ready', () => {
 
         console.log(`Download Organizer- watcher listening to: ${watcher._closers.keys().next().value}`)
+        folderCheck()
         watcher.on('add', file => {
             if (isFileMoverRunning) {
 
@@ -111,8 +124,8 @@ function renameFile(moveFrom, moveTo) {
     });
 }
 
-function doesFileExist(moveTo, callback) {
-    fs.exists(moveTo, (exi) => {
+function doesFileExist(file, callback) {
+    fs.exists(file, (exi) => {
         if (exi) {
             callback(true)
         } else {
@@ -129,16 +142,12 @@ function getRandomID(len = 3, chars = 'abcdefghjkmnopqrstwxyz0123456789') {
     return id;
 }
 
-
 function getCategory(filename) {
     let arr = filename.split('.');
-    let type = arr[arr.length - 1];
-    let category = '';
-
-    // fix const arr with filetypes.
-    if (type === 'png' || type === 'jpg') {
-        category = 'images'
-    }
+    let type = arr[arr.length - 1].toLowerCase();
+    let category = categories.filter(obj => {
+        return obj.filetypes.includes(type)
+    })[0].category
     return category
 }
 
@@ -151,14 +160,71 @@ document.getElementById('orgDoCatZips').addEventListener('click', () => {
 document.getElementById('orgDoCatDocuments').addEventListener('click', () => {
     updateOrgDownPrefContent(categories[2].filetypes)
 })
+document.getElementById('orgDoCatAudio').addEventListener('click', () => {
+    updateOrgDownPrefContent(categories[3].filetypes)
+})
+document.getElementById('orgDoCatVideo').addEventListener('click', () => {
+    updateOrgDownPrefContent(categories[4].filetypes)
+})
 
-function updateOrgDownPrefContent(fileTypes){
+function folderCheck() {
+    for (let index = 0; index < categories.length; index++) {
+        const category = categories[index].category;
+        fs.exists(baseFolder + category, (exi) => {
+            if (!exi) {
+                fs.mkdir(baseFolder + category.toLowerCase(), {
+                    recursive: true
+                }, (err) => {
+                    if (err) throw err;
+                });
+            }
+        });
+    }
+}
+
+function createNewCategory(category){
+    let DOMCategories = document.getElementById('org-down-pref-categories')
+    categories.push({category: category})
+    let h3 = document.createElement('H3')
+    let txtNode = document.createTextNode(category)
+    h3.classList.add('org-down-pref__categories-item')
+    h3.appendChild(txtNode)
+    DOMCategories.appendChild(h3)
+
+    orgDownCatInput.style.display = 'none'
+    orgDownCatAdd.style.display = 'block'
+}
+
+function updateOrgDownPrefContent(fileTypes) {
     prefContent.innerHTML = ''
     // let fileTypes = categories[0].filetypes
-    for(let i = 0; i < fileTypes.length; i++){
+    for (let i = 0; i < fileTypes.length; i++) {
         let p = document.createElement('P')
         let fileType = document.createTextNode(`.${fileTypes[i]}`)
         p.appendChild(fileType)
         prefContent.appendChild(p);
     }
 }
+
+
+orgDownCatAdd.addEventListener('click', () => {
+    orgDownCatAdd.style.display = 'none'
+    orgDownCatInput.style.display = 'block'
+    orgDownCatInput.focus()
+})
+
+orgDownCatInput.addEventListener("focusout", () => {
+
+    if (orgDownCatInput.value.length === 0) {
+
+        orgDownCatInput.style.display = 'none'
+        orgDownCatAdd.style.display = 'block'
+    }
+});
+
+document.addEventListener('keyup', (e) => {
+    if(e.keyCode === 13 && orgDownCatInput === document.activeElement && orgDownCatInput.value.length !== 0) {
+        createNewCategory(orgDownCatInput.value);
+        orgDownCatInput.value = ''
+    }
+})

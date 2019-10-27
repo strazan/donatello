@@ -1,3 +1,10 @@
+@import url('https://rsms.me/inter/inter.css');
+html { font-family: 'Inter', sans-serif; }
+@supports (font-variation-settings: normal) {
+  html { font-family: 'Inter var', sans-serif; }
+}
+
+
 body {
     height: 100vh;
     margin: 0;
@@ -92,6 +99,16 @@ nav div h2 {
 .org-down-pref__categories h2 {
     margin-top: 0;
     font-size: 19px;
+}
+
+.org-down-pref__categories input {
+    border: none;
+    border-bottom: 1px solid #eee;
+    font-size: 16px;
+    width: 80px;
+    outline: none;
+    padding: 9px 0;
+    color: rgba(3, 102, 214, 1);
 }
 
 .org-down-pref__categories-item {
