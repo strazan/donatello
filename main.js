@@ -30,7 +30,7 @@ app.on('ready', function () {
         slashes: true
     }))
 
-    // const mainMenu = Menu.buildFromTemplate(mainMenuTemplate)
+    const mainMenu = Menu.buildFromTemplate(mainMenuTemplate)
 
     // Menu.setApplicationMenu(mainMenu)
     // console.log(mainMenu)
@@ -71,7 +71,7 @@ function openPrefWindow() {
   
 }
 
-//+ document.getElementById('scriptOrgDow'))
+// + document.getElementById('scriptOrgDow'))
 // document.getElementById('scriptOrgDow').addEventListener('click', () => {
 
 //     orgDowPrefWindow.show = true;
