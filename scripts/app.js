@@ -8,10 +8,6 @@ TODO:
 
 • remove category
 
-• add/remove filetypes in categories.
-
-
-
 */
 
 
@@ -42,7 +38,7 @@ let categories = [{
     },
     {
         category: 'Audio',
-        filetypes: ['waw', 'mp3']
+        filetypes: ['wav', 'mp3', 'aif', 'aiff']
     },
     {
         category: 'Video',
@@ -60,6 +56,10 @@ let watcher = chokidar.watch(baseFolder, {
 
 let orgDownCatAdd = document.getElementById('orgDoCatAdd')
 let orgDownCatInput = document.getElementById('orgDownCatInput')
+let fileTypeInput = document.getElementById('orgDoFileTypeInput')
+let fileTypeAddDiv = document.getElementById('orgDoFileTypeAddDot')
+
+let activeCategory;
 
 watcherSetUp(watcher);
 
@@ -175,7 +175,6 @@ function getCategoryFromFileType(type) {
     return category;
 }
 
-
 /*
         PLEASE FIND BETTER SOLUTION
 */
@@ -201,7 +200,8 @@ document.getElementById('orgDoCatVideo').addEventListener('click', () => {
     changeCatHeading('Video')
 })
 
-function changeCatHeading(cat){
+function changeCatHeading(cat) {
+    activeCategory =  categories.find(c => cat === c.category)
     catHeading.innerHTML = `Categories<span class="makeGray">/${cat}</span>`
 }
 
@@ -223,16 +223,34 @@ function folderCheck() {
 function createNewCategory(category) {
     let DOMCategories = document.getElementById('org-down-pref-categories')
     categories.push({
-        category: category
+        category: category,
+        filetypes: []
     })
     let h3 = document.createElement('H3')
     let txtNode = document.createTextNode(category)
     h3.classList.add('org-down-pref__categories-item')
     h3.appendChild(txtNode)
     DOMCategories.appendChild(h3)
+    h3.addEventListener('click', () => {
+        let cat = categories.find(c => category === c.category) //.filetypes
+        console.log(cat)
+        updateOrgDownPrefContent(cat)
+        activeCategory =  cat
+        changeCatHeading(activeCategory.category)
 
+    })
     orgDownCatInput.style.display = 'none'
     orgDownCatAdd.style.display = 'block'
+}
+
+function createNewFileType(filetype) {
+    console.log(activeCategory);
+    console.log('file: ', activeCategory.filetypes) //categories.find(c => activeCategory.category === c.category).filetypes)
+    let types = categories.find(c => activeCategory.category === c.category).filetypes
+    types.push(filetype)
+    updateOrgDownPrefContent(types)
+
+    fileTypeAddDiv.style.display = 'none'
 }
 
 function updateOrgDownPrefContent(fileTypes) {
@@ -240,9 +258,8 @@ function updateOrgDownPrefContent(fileTypes) {
     // let fileTypes = categories[0].filetypes
     let isRed = []
     let fileTypeAdd = document.getElementById('orgDoFileTypeAdd')
-    let fileTypeInput = document.getElementById('orgDoFileTypeInput')
 
-    console.log(fileTypes);
+    // console.log(fileTypes);
     for (let i = 0; i < fileTypes.length; i++) {
         let p = document.createElement('P')
         let fileType = document.createTextNode(`.${fileTypes[i]}`)
@@ -268,20 +285,20 @@ function updateOrgDownPrefContent(fileTypes) {
     fileTypeAdd.addEventListener('click', () => {
         fileTypeAdd.style.display = 'none'
         fileTypeInput.style.display = 'block'
+        fileTypeAddDiv.style.display = 'flex'
         fileTypeInput.focus()
     })
-    
+
     fileTypeInput.addEventListener("focusout", () => {
-    
+
         if (fileTypeInput.value.length === 0) {
-    
+
             fileTypeInput.style.display = 'none'
+            fileTypeAddDiv.style.display = 'none'
             fileTypeAdd.style.display = 'block'
         }
     });
 }
-
-
 
 orgDownCatAdd.addEventListener('click', () => {
     orgDownCatAdd.style.display = 'none'
@@ -292,7 +309,6 @@ orgDownCatAdd.addEventListener('click', () => {
 orgDownCatInput.addEventListener("focusout", () => {
 
     if (orgDownCatInput.value.length === 0) {
-
         orgDownCatInput.style.display = 'none'
         orgDownCatAdd.style.display = 'block'
     }
@@ -303,4 +319,11 @@ document.addEventListener('keyup', (e) => {
         createNewCategory(orgDownCatInput.value);
         orgDownCatInput.value = ''
     }
+    if (e.keyCode === 13 && fileTypeInput === document.activeElement && fileTypeInput.value.length !== 0) {
+        createNewFileType(fileTypeInput.value);
+        fileTypeInput.value = ''
+    }
 })
+
+categories.find(c => c.category === 'Images').filetypes.push('notimage')
+// console.log(categories.find(c => c.category === 'Images').filetypes)
