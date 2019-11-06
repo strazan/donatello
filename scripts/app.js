@@ -1,58 +1,24 @@
-/*
-
-TODO:
-
-• connect category dom elements to object maybe?
-    - Then run eventlistener in loop, no need for ID and 
-    makes adding cat easier perhaps.
-
-• remove category
-
-*/
-
-
 const path = require('path')
-const fs = require('fs')
-const electron = require('electron')
-const chokidar = require('chokidar');
 
+const electron = require('electron');
+// const chokidar = require('chokidar');
+// const main = require('scripts/main.js')
+// console.log(require('./main'))
 const {
     app,
     BrowserWindow,
     dialog
 } = electron;
 
+const orgdown = require('./scripts/organizeDownloads')
+// const addCategory = require('./organizeDownloads.js').addCategory;
+
+// let baseFolder = organizeDownloads.getBaseFolder
 let prefContent = document.getElementById('org-down-pref__content');
 
-let categories = [{
-        category: 'Images',
-        filetypes: ['jpg', 'png', 'tiff']
-    },
-    {
-        category: 'Zips',
-        filetypes: ['zip', 'rar']
-    },
-    {
-        category: 'Documents',
-        filetypes: ['pdf', 'html', 'xml']
-    },
-    {
-        category: 'Audio',
-        filetypes: ['wav', 'mp3', 'aif', 'aiff']
-    },
-    {
-        category: 'Video',
-        filetypes: ['mov', 'mp4']
-    },
-]
+// let isFileMoverRunning = true;
 
 
-let isFileMoverRunning = true;
-let toggleOne = document.getElementById('script-one');
-let baseFolder = `/Users/siggelabor/Desktop/folder-to/`;
-let watcher = chokidar.watch(baseFolder, {
-    persistent: true
-});
 
 let orgDownCatAdd = document.getElementById('orgDoCatAdd')
 let orgDownCatInput = document.getElementById('orgDownCatInput')
@@ -61,168 +27,82 @@ let fileTypeAddDiv = document.getElementById('orgDoFileTypeAddDot')
 
 let activeCategory;
 
-watcherSetUp(watcher);
+// let labelBasePath; // = document.getElementById('orgDownBasePath');
+// labelBasePath.innerHTML = organizeDownloads.baseFolder;
+// let labelBasePathInput; // = document.getElementById('orgDownBasePathInput')
+
 
 
 let labelBasePath = document.getElementById('orgDownBasePath');
-labelBasePath.innerHTML = baseFolder;
+labelBasePath.innerHTML = orgdown.baseFolder;
 let labelBasePathInput = document.getElementById('orgDownBasePathInput')
-// toggleOne.addEventListener('click', function () {
-//     isFileMoverRunning = !isFileMoverRunning
-//     if (isFileMoverRunning) {
-//         toggleOne.style.backgroundColor = '#fff';
-//     } else {
-//         toggleOne.style.backgroundColor = '#fff3ee';
-//     }
-
-// });
 
 labelBasePath.addEventListener('click', () => {
     labelBasePathInput.click()
     labelBasePathInput.onchange = function (e) {
         baseFolder = labelBasePathInput.files[0].path + '/';
-        labelBasePath.innerHTML = baseFolder;
-        watcher = chokidar.watch(baseFolder, {
-            persistent: true
-        });
-        watcherSetUp(watcher);
+        labelBasePath.innerHTML = orgdown.baseFolder;
+
+        orgdown.baseFolder = baseFolder
+        orgdown.setWatcher(orgdown.baseFolder)
     }
 })
 
-function watcherSetUp(watcher) {
 
-    watcher.on('ready', () => {
+/* MAKE BETTER */
+document.getElementById('orgDoCatImages').addEventListener('click', () => {
+    updateOrgDownPrefContent(orgdown.categories[0].filetypes)
+    changeCatHeading('Images')
+})
+document.getElementById('orgDoCatZips').addEventListener('click', () => {
+    updateOrgDownPrefContent(orgdown.categories[1].filetypes)
+    changeCatHeading('Zips')
+})
+document.getElementById('orgDoCatDocuments').addEventListener('click', () => {
+    updateOrgDownPrefContent(orgdown.categories[2].filetypes)
+    changeCatHeading('Documents')
+})
+document.getElementById('orgDoCatAudio').addEventListener('click', () => {
+    updateOrgDownPrefContent(orgdown.categories[3].filetypes)
+    changeCatHeading('Audio')
+})
+document.getElementById('orgDoCatVideo').addEventListener('click', () => {
+    updateOrgDownPrefContent(orgdown.categories[4].filetypes)
+    changeCatHeading('Video')
+})
 
-        console.log(`Download Organizer- watcher listening to: ${watcher._closers.keys().next().value}`)
-        folderCheck()
-        watcher.on('add', file => {
-            if (isFileMoverRunning) {
 
-                let filename = file.split('/')[(file.split('/').length) - 1];
-                let category = getCategory(file);
-                let moveFrom = `${baseFolder}${filename}`
-                let moveTo = `${baseFolder}${category}/${filename}`
 
-                moveFile(moveFrom, moveTo, filename, category);
-            }
+orgDownCatAdd.addEventListener('click', () => {
+    orgDownCatAdd.style.display = 'none'
+    orgDownCatInput.style.display = 'block'
+    orgDownCatInput.focus()
+})
 
-        });
-    })
-}
+orgDownCatInput.addEventListener("focusout", () => {
 
-function moveFile(from, to, filename, cat) {
-
-    doesFileExist(to, exists => {
-        if (exists) {
-            newFileName(from, to, filename, cat);
-        } else {
-            renameFile(from, to)
-        }
-    })
-}
-
-function newFileName(moveFrom, moveTo, filename, cat) {
-
-    let newName = `${filename.split('.')[0]}-${getRandomID()}.${filename.split('.')[1]}`
-    moveTo = `${baseFolder}${cat}/${newName}`
-
-    doesFileExist(moveTo, callback => {
-        if (!callback) {
-            renameFile(moveFrom, moveTo)
-        }
-    })
-}
-
-function renameFile(moveFrom, moveTo) {
-    fs.rename(moveFrom, moveTo, function (err) {
-        if (err) {
-            throw err;
-        }
-    });
-}
-
-function doesFileExist(file, callback) {
-    fs.exists(file, (exi) => {
-        if (exi) {
-            callback(true)
-        } else {
-            callback(false)
-        }
-    });
-}
-
-function getRandomID(len = 3, chars = 'abcdefghjkmnopqrstwxyz0123456789') {
-    let id = '';
-    while (len--) {
-        id += chars[Math.random() * chars.length | 0];
+    if (orgDownCatInput.value.length === 0) {
+        orgDownCatInput.style.display = 'none'
+        orgDownCatAdd.style.display = 'block'
     }
-    return id;
-}
+});
 
-function getCategory(filename) {
-    let arr = filename.split('.');
-    let type = arr[arr.length - 1].toLowerCase();
-    let category = categories.filter(obj => {
-        return obj.filetypes.includes(type)
-    })[0].category
-    return category
-}
-
-function getCategoryFromFileType(type) {
-    let category = categories.filter(obj => {
-        return obj.filetypes.includes(type)
-    })[0].category
-    return category;
-}
 
 /*
         PLEASE FIND BETTER SOLUTION
 */
 let catHeading = document.getElementById('ord-down-cat-heading')
-document.getElementById('orgDoCatImages').addEventListener('click', () => {
-    updateOrgDownPrefContent(categories[0].filetypes)
-    changeCatHeading('Images')
-})
-document.getElementById('orgDoCatZips').addEventListener('click', () => {
-    updateOrgDownPrefContent(categories[1].filetypes)
-    changeCatHeading('Zips')
-})
-document.getElementById('orgDoCatDocuments').addEventListener('click', () => {
-    updateOrgDownPrefContent(categories[2].filetypes)
-    changeCatHeading('Documents')
-})
-document.getElementById('orgDoCatAudio').addEventListener('click', () => {
-    updateOrgDownPrefContent(categories[3].filetypes)
-    changeCatHeading('Audio')
-})
-document.getElementById('orgDoCatVideo').addEventListener('click', () => {
-    updateOrgDownPrefContent(categories[4].filetypes)
-    changeCatHeading('Video')
-})
+
 
 function changeCatHeading(cat) {
-    activeCategory =  categories.find(c => cat === c.category)
+    activeCategory = orgdown.categories.find(c => cat === c.category)
     catHeading.innerHTML = `Categories<span class="makeGray">/${cat}</span>`
 }
 
-function folderCheck() {
-    for (let index = 0; index < categories.length; index++) {
-        const category = categories[index].category;
-        fs.exists(baseFolder + category, (exi) => {
-            if (!exi) {
-                fs.mkdir(baseFolder + category.toLowerCase(), {
-                    recursive: true
-                }, (err) => {
-                    if (err) throw err;
-                });
-            }
-        });
-    }
-}
 
 function createNewCategory(category) {
     let DOMCategories = document.getElementById('org-down-pref-categories')
-    categories.push({
+    orgdown.categories.push({
         category: category,
         filetypes: []
     })
@@ -232,10 +112,10 @@ function createNewCategory(category) {
     h3.appendChild(txtNode)
     DOMCategories.appendChild(h3)
     h3.addEventListener('click', () => {
-        let cat = categories.find(c => category === c.category) //.filetypes
+        let cat = orgdown.categories.find(c => category === c.category) //.filetypes
         console.log(cat)
         updateOrgDownPrefContent(cat)
-        activeCategory =  cat
+        activeCategory = cat
         changeCatHeading(activeCategory.category)
 
     })
@@ -246,7 +126,7 @@ function createNewCategory(category) {
 function createNewFileType(filetype) {
     console.log(activeCategory);
     console.log('file: ', activeCategory.filetypes) //categories.find(c => activeCategory.category === c.category).filetypes)
-    let types = categories.find(c => activeCategory.category === c.category).filetypes
+    let types = orgdown.categories.find(c => activeCategory.category === c.category).filetypes
     types.push(filetype)
     updateOrgDownPrefContent(types)
 
@@ -269,13 +149,22 @@ function updateOrgDownPrefContent(fileTypes) {
             if (isRed[i]) {
                 prefContent.childNodes[i].remove()
                 let cat = getCategoryFromFileType(fileTypes[i])
-                let types = categories.find(c => c.category === cat).filetypes.splice(categories.find(c => c.category === cat).filetypes.indexOf(fileTypes[i]), 1);
+                let types = orgdown.categories.find(c => c.category === cat).filetypes.splice(categories.find(c => c.category === cat).filetypes.indexOf(fileTypes[i]), 1);
             } else {
                 p.style.backgroundColor = 'red';
                 p.innerHTML = 'DELETE'
                 p.style.color = '#fff'
                 p.style.textAlign = 'center'
                 isRed[i] = true;
+                setTimeout(() => {
+                    p.style.backgroundColor = '#fff';
+                    console.log(fileType)
+                    p.innerHTML = ''
+                    p.appendChild(fileType)
+                    p.style.color = '#000'
+                    p.style.textAlign = 'left'
+                    isRed[i] = false;
+                }, 700)
             }
         })
         prefContent.appendChild(p);
@@ -300,19 +189,7 @@ function updateOrgDownPrefContent(fileTypes) {
     });
 }
 
-orgDownCatAdd.addEventListener('click', () => {
-    orgDownCatAdd.style.display = 'none'
-    orgDownCatInput.style.display = 'block'
-    orgDownCatInput.focus()
-})
 
-orgDownCatInput.addEventListener("focusout", () => {
-
-    if (orgDownCatInput.value.length === 0) {
-        orgDownCatInput.style.display = 'none'
-        orgDownCatAdd.style.display = 'block'
-    }
-});
 
 document.addEventListener('keyup', (e) => {
     if (e.keyCode === 13 && orgDownCatInput === document.activeElement && orgDownCatInput.value.length !== 0) {
@@ -324,6 +201,3 @@ document.addEventListener('keyup', (e) => {
         fileTypeInput.value = ''
     }
 })
-
-categories.find(c => c.category === 'Images').filetypes.push('notimage')
-// console.log(categories.find(c => c.category === 'Images').filetypes)

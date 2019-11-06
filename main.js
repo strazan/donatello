@@ -19,13 +19,13 @@ app.on('ready', function () {
         webPreferences: {
             nodeIntegration: true
         },
-         width: 900,
+        width: 900,
         height: 600,
     });
 
     mainWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'preferences.html'),
-    //    pathname: path.join(__dirname, 'main-window.html'),
+        // pathname: path.join(__dirname, 'preferences.html'),
+        pathname: path.join(__dirname, 'main-window.html'),
         protocol: 'file:',
         slashes: true
     }))
@@ -34,24 +34,39 @@ app.on('ready', function () {
 
     // Menu.setApplicationMenu(mainMenu)
     // console.log(mainMenu)
-    // openPrefWindow();
+    openPrefWindow();
 });
 
 const mainMenuTemplate = [{
     label: 'File',
     submenu: [{
-        label: 'Preferences',
-        click(){
-            openPrefWindow()
+            label: 'Preferences',
+            click() {
+                openPrefWindow()
+            }
+        },
+        {
+            label: 'Quit',
+            click() {
+                app.quit();
+            }
         }
-    },
-    {
-        label: 'Quit',
-        click(){
-            app.quit();
+    ]
+}, {
+    label: 'Help',
+    submenu: [{
+        label: 'DevTools',
+        click() {
+            openDevTools()
         }
     }]
 }];
+
+function openDevTools() {
+    let win = new BrowserWindow()
+    win.webContents.addDevToolsExtension()
+
+}
 
 function openPrefWindow() {
     orgDowPrefWindow = new BrowserWindow({
@@ -64,11 +79,11 @@ function openPrefWindow() {
     });
 
     orgDowPrefWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'organize-download-pref.html'),
+        pathname: path.join(__dirname, 'preferences.html'),
         protocol: 'file:',
         slashes: true
     }))
-  
+
 }
 
 // + document.getElementById('scriptOrgDow'))
