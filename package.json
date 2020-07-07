@@ -4,7 +4,7 @@
   "description": "Automates silly tasks and organizes your machine",
   "main": "main.js",
   "devDependencies": {
-    "electron": "^6.0.12",
+    "electron": "^7.2.4",
     "electron-builder": "^21.2.0"
   },
   "build": {
