@@ -6,9 +6,10 @@ import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 
 type MainFrameProps = {
     setSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>
+    children: React.ReactNode
 }
 
-export default function MainFrame({ setSidebarOpen }: MainFrameProps) {
+export default function MainFrame({ setSidebarOpen, children }: MainFrameProps) {
     return (
 
         <div className="md:pl-64">
@@ -96,7 +97,7 @@ export default function MainFrame({ setSidebarOpen }: MainFrameProps) {
                 </div>
 
                 <main className="flex-1">
-
+                    {children}
                 </main>
             </div>
         </div>

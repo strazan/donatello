@@ -1,16 +1,15 @@
 
 import { Fragment } from 'react'
+import {
+    Link,
+    useLocation
+} from 'react-router-dom'
 import { Dialog, Transition } from '@headlessui/react'
 import {
-    CalendarIcon,
-    ChartBarIcon,
-    FolderIcon,
     HomeIcon,
-    InboxIcon,
-    UsersIcon,
     XMarkIcon,
+    ArrowDownOnSquareIcon
 } from '@heroicons/react/24/outline'
-
 import classNames from 'classnames'
 
 type SideBarProps = {
@@ -20,30 +19,12 @@ type SideBarProps = {
 
 export default function SideBar({ sidebarOpen, setSidebarOpen }: SideBarProps) {
 
-    /*
-This example requires some changes to your config:
- 
-```
-// tailwind.config.js
-module.exports = {
-  // ...
-  plugins: [
-    // ...
-    require('@tailwindcss/forms'),
-  ],
-}
-```
-*/
-
-
+    const { pathname } = useLocation();
+    console.log(pathname)
     const navigation = [
-        { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
-
+        { name: 'Dashboard', href: '/', icon: HomeIcon },
+        { name: 'Download Manager', href: '/download-manager', icon: ArrowDownOnSquareIcon },
     ]
-
-
-
-
 
     return (
         <div>
@@ -102,11 +83,11 @@ module.exports = {
                                 <div className="mt-5 h-0 flex-1 overflow-y-auto">
                                     <nav className="space-y-1 px-2">
                                         {navigation.map((item) => (
-                                            <a
+                                            <Link
                                                 key={item.name}
-                                                href={item.href}
+                                                to={item.href}
                                                 className={classNames(
-                                                    item.current
+                                                    item.href === pathname
                                                         ? 'bg-gray-100 text-gray-900'
                                                         : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                                                     'group rounded-md py-2 px-2 flex items-center text-base font-medium'
@@ -114,13 +95,13 @@ module.exports = {
                                             >
                                                 <item.icon
                                                     className={classNames(
-                                                        item.current ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500',
+                                                        item.href === pathname ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500',
                                                         'mr-4 flex-shrink-0 h-6 w-6'
                                                     )}
                                                     aria-hidden="true"
                                                 />
                                                 {item.name}
-                                            </a>
+                                            </Link>
                                         ))}
                                     </nav>
                                 </div>
@@ -149,23 +130,23 @@ module.exports = {
                     <div className="mt-5 flex flex-grow flex-col">
                         <nav className="flex-1 space-y-1 px-2 pb-4">
                             {navigation.map((item) => (
-                                <a
+                                <Link
                                     key={item.name}
-                                    href={item.href}
+                                    to={item.href}
                                     className={classNames(
-                                        item.current ? 'bg-gray-100 text-gray-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-                                        'group rounded-md py-2 px-2 flex items-center text-xs font-regular'
+                                        item.href === pathname ? 'bg-gray-100 text-gray-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                                        'group rounded-md py-2 px-2 flex items-center text-sm font-regular'
                                     )}
                                 >
                                     <item.icon
                                         className={classNames(
-                                            item.current ? 'text-blue-500' : 'text-blue-400 group-hover:text-gray-500',
+                                            item.href === pathname ? 'text-blue-500' : 'text-blue-400 group-hover:text-gray-500',
                                             'mr-3 flex-shrink-0 h-5 w-5'
                                         )}
                                         aria-hidden="true"
                                     />
                                     {item.name}
-                                </a>
+                                </Link>
                             ))}
                         </nav>
                     </div>
