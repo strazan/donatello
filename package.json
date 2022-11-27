@@ -1,56 +1,47 @@
 {
-  "name": "donatello",
-  "version": "0.1.0",
   "private": true,
-  "dependencies": {
-    "@headlessui/react": "^1.7.3",
-    "@heroicons/react": "^2.0.12",
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^13.0.0",
-    "@testing-library/user-event": "^13.2.1",
-    "@types/jest": "^27.0.1",
-    "@types/node": "^16.7.13",
-    "@types/react": "^18.0.0",
-    "@types/react-dom": "^18.0.0",
-    "classnames": "^2.3.2",
-    "next": "^13.0.2",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "typescript": "^4.4.2"
-  },
-  "main": "src/main.js",
+  "main": "main/index.js",
+  "productName": "Donatello",
   "scripts": {
-    "dev": "next",
-    "app": "electron ."
+    "clean": "rimraf dist main renderer/out renderer/.next",
+    "dev": "yarn run electron:watch",
+    "app":  "electron .",
+    "electron:watch": "tsc -p electron-src --watch",
+    "build-renderer": "next build renderer && next export renderer",
+    "build-electron": "tsc -p electron-src",
+    "build": "yarn run build-renderer && yarn run build-electron",
+    "pack-app": "yarn run build && electron-builder --dir",
+    "dist": "yarn run build && electron-builder",
+    "type-check": "tsc -p ./renderer/tsconfig.json && tsc -p ./electron-src/tsconfig.json"
   },
-  "browser": {
-    "fs": false,
-    "path": false,
-    "os": false
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "dependencies": {
+    "@headlessui/react": "^1.7.4",
+    "@heroicons/react": "^2.0.13",
+    "chokidar": "^3.5.3",
+    "classnames": "^2.3.2",
+    "electron-is-dev": "^1.1.0",
+    "electron-next": "^3.1.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@types/react-router-dom": "^5.3.3",
+    "@types/node": "^14.14.6",
+    "@types/react": "^16.9.9",
+    "@types/react-dom": "^16.9.9",
     "autoprefixer": "^10.4.13",
-    "electron": "^21.2.0",
-    "postcss": "^8.4.18",
-    "tailwindcss": "^3.2.1"
+    "electron": "^13",
+    "electron-builder": "^23.0.3",
+    "next": "latest",
+    "postcss": "^8.4.19",
+    "rimraf": "^3.0.0",
+    "tailwindcss": "^3.2.4",
+    "typescript": "^4.0.5"
+  },
+  "build": {
+    "asar": true,
+    "files": [
+      "main",
+      "renderer/out"
+    ]
   }
 }
