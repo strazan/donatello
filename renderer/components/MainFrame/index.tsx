@@ -1,2 +1,2 @@
-import MainFrame from "./MainFrame";
+import MainFrame from './MainFrame'
 export default MainFrame

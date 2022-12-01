@@ -1,7 +1,4 @@
-import {
-    Bars3BottomLeftIcon,
-    BellIcon,
-} from '@heroicons/react/24/outline'
+import { Bars3BottomLeftIcon, BellIcon } from '@heroicons/react/24/outline'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 
 type MainFrameProps = {
@@ -9,10 +6,12 @@ type MainFrameProps = {
     children: React.ReactNode
 }
 
-export default function MainFrame({ setSidebarOpen, children }: MainFrameProps) {
+export default function MainFrame({
+    setSidebarOpen,
+    children,
+}: MainFrameProps) {
     return (
-
-        <div className="md:pl-64 grow min-h-screen h-full">
+        <div className="md:pl-64 grow min-h-screen bg-surface h-full">
             <div className="mx-auto flex max-w-4xl flex-col md:px-8 xl:px-0">
                 <div className="sticky top-0 z-10 hidden flex h-16 flex-shrink-0 border-b border-gray-200 bg-white ">
                     <button
@@ -21,7 +20,10 @@ export default function MainFrame({ setSidebarOpen, children }: MainFrameProps) 
                         onClick={() => setSidebarOpen(true)}
                     >
                         <span className="sr-only">Open sidebar</span>
-                        <Bars3BottomLeftIcon className="h-6 w-6" aria-hidden="true" />
+                        <Bars3BottomLeftIcon
+                            className="h-6 w-6"
+                            aria-hidden="true"
+                        />
                     </button>
                     <div className="flex flex-1 justify-between px-4 md:px-0">
                         {/* <div className="flex flex-1">
@@ -96,9 +98,7 @@ export default function MainFrame({ setSidebarOpen, children }: MainFrameProps) 
                     </div>
                 </div>
 
-                <main className="flex-1 px-4 md:px-0 h-full">
-                    {children}
-                </main>
+                <main className="flex-1 px-4 md:px-0 h-full">{children}</main>
             </div>
         </div>
     )

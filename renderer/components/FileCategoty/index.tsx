@@ -1,2 +1,2 @@
-import FileCategory from "./FileCategory";
+import FileCategory from './FileCategory'
 export default FileCategory

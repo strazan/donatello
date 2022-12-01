@@ -1,14 +1,10 @@
-
 import { Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import {
-    HomeIcon,
-    XMarkIcon,
-    ArrowDownOnSquareIcon
-} from '@heroicons/react/24/outline'
+import { XMarkIcon, ArrowDownOnSquareIcon } from '@heroicons/react/24/outline'
 import classNames from 'classnames'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+import { useTheme } from 'utils/theme'
 
 type SideBarProps = {
     open: boolean
@@ -16,17 +12,26 @@ type SideBarProps = {
 }
 
 export default function SideBar({ open, setOpen }: SideBarProps) {
-
-    const { pathname } = useRouter();
+    const { pathname } = useRouter()
     const navigation = [
-        { name: 'Dashboard', href: '/', icon: HomeIcon },
-        { name: 'Download Manager', href: '/download-manager', icon: ArrowDownOnSquareIcon },
+        // { name: 'Dashboard', href: '/', icon: HomeIcon },
+        {
+            name: 'Download Manager',
+            href: '/download-manager',
+            icon: ArrowDownOnSquareIcon,
+        },
     ]
+
+    const { theme, update } = useTheme()
 
     return (
         <div>
             <Transition.Root show={open} as={Fragment}>
-                <Dialog as="div" className="relative z-40 md:hidden" onClose={setOpen}>
+                <Dialog
+                    as="div"
+                    className="relative z-40 md:hidden"
+                    onClose={setOpen}
+                >
                     <Transition.Child
                         as={Fragment}
                         enter="transition-opacity ease-linear duration-300"
@@ -65,15 +70,20 @@ export default function SideBar({ open, setOpen }: SideBarProps) {
                                             className="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
                                             onClick={() => setOpen(false)}
                                         >
-                                            <span className="sr-only">Close sidebar</span>
-                                            <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />
+                                            <span className="sr-only">
+                                                Close sidebar
+                                            </span>
+                                            <XMarkIcon
+                                                className="h-6 w-6 text-white"
+                                                aria-hidden="true"
+                                            />
                                         </button>
                                     </div>
                                 </Transition.Child>
                                 <div className="flex flex-shrink-0 items-center px-4">
                                     <img
                                         className="h-8 w-auto"
-                                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                                        src="/logo.png"
                                         alt="Your Company"
                                     />
                                 </div>
@@ -92,7 +102,9 @@ export default function SideBar({ open, setOpen }: SideBarProps) {
                                             >
                                                 <item.icon
                                                     className={classNames(
-                                                        item.href === pathname ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500',
+                                                        item.href === pathname
+                                                            ? 'text-gray-500'
+                                                            : 'text-gray-400 group-hover:text-gray-500',
                                                         'mr-4 flex-shrink-0 h-6 w-6'
                                                     )}
                                                     aria-hidden="true"
@@ -112,15 +124,20 @@ export default function SideBar({ open, setOpen }: SideBarProps) {
             </Transition.Root>
 
             {/* Static sidebar for desktop */}
-            <div className="hidden md:fixed md:inset-y-0 md:flex md:w-64 md:flex-col">
-                <div className="flex flex-grow flex-col overflow-y-auto border-r border-gray-200 bg-white">
-                    <div className='pt-10 [-webkit-app-region:drag] w-full'>
-
-                    </div>
+            <div className="hidden md:fixed md:inset-y-0 md:flex md:w-64 md:flex-col bg-uiSurface">
+                <div className="flex flex-grow flex-col overflow-y-auto border-r border-outline1 ">
+                    <div className="pt-10 [-webkit-app-region:drag] w-full"></div>
+                    <button
+                        onClick={() =>
+                            update(theme === 'light' ? 'dark' : 'light')
+                        }
+                    >
+                        {theme}
+                    </button>
                     <div className="flex flex-shrink-0 items-center px-4">
                         <img
-                            className="h-8 w-8"
-                            src="https://upload.wikimedia.org/wikipedia/commons/9/95/Cinque_maestri_del_rinascimento_fiorentino%2C_XVI_sec%2C_donatello.JPG"
+                            className="h-12 w-12"
+                            src="/logo.png"
                             alt="Your Company"
                         />
                     </div>
@@ -131,13 +148,17 @@ export default function SideBar({ open, setOpen }: SideBarProps) {
                                     key={item.name}
                                     href={item.href}
                                     className={classNames(
-                                        item.href === pathname ? 'bg-gray-100 text-gray-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                                        item.href === pathname
+                                            ? 'bg-containerActive text-primaryText'
+                                            : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                                         'group rounded-md py-2 px-2 flex items-center text-sm font-regular'
                                     )}
                                 >
                                     <item.icon
                                         className={classNames(
-                                            item.href === pathname ? 'text-blue-500' : 'text-blue-400 group-hover:text-gray-500',
+                                            item.href === pathname
+                                                ? 'text-blue-500'
+                                                : 'text-blue-400 group-hover:text-gray-500',
                                             'mr-3 flex-shrink-0 h-5 w-5'
                                         )}
                                         aria-hidden="true"
@@ -150,6 +171,5 @@ export default function SideBar({ open, setOpen }: SideBarProps) {
                 </div>
             </div>
         </div>
-
     )
 }
