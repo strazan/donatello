@@ -19,6 +19,7 @@ app.on('ready', async () => {
         height: 600,
         autoHideMenuBar: true,
         titleBarStyle: 'hidden',
+        resizable: false,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: true,
