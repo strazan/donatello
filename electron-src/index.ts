@@ -1,48 +1,46 @@
 // Native
 import { join } from 'path'
 import { format } from 'url'
-import { onDownloadChange } from './utils/watcher'
 
 // Packages
-import { BrowserWindow, app, ipcMain, IpcMainEvent } from 'electron'
+import { BrowserWindow, app, ipcMain } from 'electron'
 import isDev from 'electron-is-dev'
 import prepareNext from 'electron-next'
 
+import store from './utils/store'
+import watcher from './utils/watcher'
+
 // Prepare the renderer once the app is ready
 app.on('ready', async () => {
-  await prepareNext('./renderer')
+    await prepareNext('./renderer')
 
-  const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
-    webPreferences: {
-      nodeIntegration: false,
-      contextIsolation: false,
-      preload: join(__dirname, 'preload.js'),
-    },
-  })
-
-  const url = isDev
-    ? 'http://localhost:8000/'
-    : format({
-      pathname: join(__dirname, '../renderer/out/index.html'),
-      protocol: 'file:',
-      slashes: true,
+    const mainWindow = new BrowserWindow({
+        width: 800,
+        height: 600,
+        autoHideMenuBar: true,
+        titleBarStyle: 'hidden',
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: true,
+            preload: join(__dirname, 'preload.js'),
+        },
     })
 
-  mainWindow.loadURL(url)
+    const url = isDev
+        ? 'http://localhost:8000/'
+        : format({
+              pathname: join(__dirname, '../renderer/out/index.html'),
+              protocol: 'file:',
+              slashes: true,
+          })
 
-  onDownloadChange((event, file) => {
-    console.log(event, file)
-    // mainWindow.webContents.send('download', file)
-  })
+    mainWindow.loadURL(url)
+
+    watcher.init()
+    store.init(ipcMain)
 })
 
 // Quit the app once all windows are closed
 app.on('window-all-closed', app.quit)
 
 // listen the channel `message` and resend the received message to the renderer process
-ipcMain.on('message', (event: IpcMainEvent, message: any) => {
-  console.log(message)
-  setTimeout(() => event.sender.send('message', 'hi from electron'), 500)
-})
