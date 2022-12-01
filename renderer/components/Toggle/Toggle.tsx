@@ -9,7 +9,6 @@ type ToggleProps = {
 }
 
 export default function Toggle({ onChange, value, label }: ToggleProps) {
-
     return (
         <Switch
             checked={value}
@@ -18,7 +17,10 @@ export default function Toggle({ onChange, value, label }: ToggleProps) {
             rounded-full"
         >
             <span className="sr-only">{label}</span>
-            <span aria-hidden="true" className="pointer-events-none absolute h-full w-full rounded-md bg-surface" />
+            <span
+                aria-hidden="true"
+                className="pointer-events-none absolute h-full w-full rounded-md bg-surface"
+            />
             <span
                 aria-hidden="true"
                 className={classNames(

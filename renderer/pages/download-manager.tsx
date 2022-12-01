@@ -1,4 +1,4 @@
-import DownloadManager from "components/pages/DownloadManager";
+import DownloadManager from 'components/pages/DownloadManager'
 // import fs from 'fs';
 // import path from "path"
 
@@ -14,8 +14,6 @@ import DownloadManager from "components/pages/DownloadManager";
 //     const jsonDirectory = path.join(path.parse(process.cwd()).root, 'Users/siggelabor/Downloads');
 //     const dir = path.resolve(jsonDirectory);
 //     const filenames = fs.readdirSync(dir);
-
-
 
 //     return { props: { data: JSON.stringify(func.toString()) } }
 // }
