@@ -9,6 +9,7 @@ import prepareNext from 'electron-next'
 
 import store from './utils/store'
 import watcher from './utils/watcher'
+import system from './utils/system'
 
 // Prepare the renderer once the app is ready
 app.on('ready', async () => {
@@ -30,15 +31,16 @@ app.on('ready', async () => {
     const url = isDev
         ? 'http://localhost:8000/'
         : format({
-              pathname: join(__dirname, '../renderer/out/index.html'),
-              protocol: 'file:',
-              slashes: true,
-          })
+            pathname: join(__dirname, '../renderer/out/index.html'),
+            protocol: 'file:',
+            slashes: true,
+        })
 
     mainWindow.loadURL(url)
 
     watcher.init()
     store.init(ipcMain)
+    system.init(mainWindow)
 })
 
 // Quit the app once all windows are closed

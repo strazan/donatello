@@ -7,15 +7,14 @@ import {
     IpcRendererEvent,
 } from 'electron'
 
-// contextBridge.exposeInMainWorld('versions', {})
-
 contextBridge.exposeInMainWorld('electronAPI', {
     init: () => ipcRenderer.send('init'),
     toggleDownload: (name: string, value: boolean) =>
         ipcRenderer.send('toggleDownload', name, value),
     settings: (callback: (event: IpcRendererEvent, ...args: any[]) => void) =>
         ipcRenderer.on('settings', callback),
-    // we can also expose variables, not just functions
+    system: (callback: (event: IpcRendererEvent, ...args: any[]) => void) =>
+        ipcRenderer.on('system', callback),
 })
 
 declare global {
