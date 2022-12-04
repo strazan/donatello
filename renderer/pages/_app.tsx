@@ -3,8 +3,9 @@ import { AppProps } from 'next/app'
 
 import 'styles/index.css'
 import 'tailwindcss/tailwind.css'
-import { SettingsContextProvider } from 'utils/settings'
-import { ThemeContextProvider } from 'utils/theme'
+import { SettingsContextProvider } from 'utils/providers/settings'
+import { ThemeContextProvider } from 'utils/providers/theme'
+import { SystemContextProvider } from 'utils/providers/system'
 
 function App({ Component, pageProps }: AppProps) {
     const [theme, setTheme] = useState('')
@@ -27,9 +28,11 @@ function App({ Component, pageProps }: AppProps) {
 
     return (
         <SettingsContextProvider>
-            <ThemeContextProvider>
-                <Component {...pageProps} />
-            </ThemeContextProvider>
+            <SystemContextProvider>
+                <ThemeContextProvider>
+                    <Component {...pageProps} />
+                </ThemeContextProvider>
+            </SystemContextProvider>
         </SettingsContextProvider>
     )
 }

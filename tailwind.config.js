@@ -14,11 +14,13 @@ module.exports = {
             outline3: '#C8C7CB',
             containerFill: '#908E96',
             containerFillHover: '#86848D',
-            primaryText: '#1A1523',
             secondaryText: '#6F6E77',
+            primaryText: '#1A1523',
 
             primary: '#4E3091',
             primaryContainer: '#E9DDFF',
+            onPrimaryContainer: '#23005C',
+        
         },
         themes: {
             dark: {
@@ -32,11 +34,12 @@ module.exports = {
                 outline3: '#504F57',
                 containerFill: '#706F78',
                 containerFillHover: '#7E7D86',
+                secondaryText: '#A09FA6',
                 primaryText: '#EDEDEF',
-                secondaryText: '#EDEDEF',
 
                 primary: '#D0BCFF',
                 primaryContainer: '#513394',
+                onPrimaryContainer: '#E9DDFF',
             },
         },
     },

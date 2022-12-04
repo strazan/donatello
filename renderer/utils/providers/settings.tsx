@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 
 const SettingsContext = createContext({
-    settings: {},
+    settings: [],
     update: (settings: any) => null,
 })
 

@@ -1,8 +1,8 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import React, { createContext, useContext, useState } from 'react'
 
 const ThemeContext = createContext({
     theme: 'dark',
-    update: (theme: stirng) => null,
+    update: (() => null) as React.Dispatch<React.SetStateAction<string>>,
 })
 
 export const ThemeContextProvider = ({ children }) => {
