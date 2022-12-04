@@ -1,6 +1,6 @@
 import { MoonIcon, SunIcon } from '@heroicons/react/24/outline'
 import React from 'react'
-import { useTheme } from 'utils/theme'
+import { useTheme } from 'utils/providers/theme'
 
 export default function Menubar() {
     const { theme, update } = useTheme()

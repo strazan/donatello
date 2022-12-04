@@ -19,9 +19,7 @@ const FileCategory = ({ name, active, files }: Props) => {
 
     return (
         <div className="py-2 px-4 flex items-center rounded-lg bg-surfaceVariant">
-            <p className="text-sm w-20 text-secondaryText font-medium">
-                {name}
-            </p>
+            <p className="text-sm w-20 text-primaryText font-medium">{name}</p>
             <p className="text-xs pl-4 text-outline3 font-medium text-ellipsis w-52 overflow-hidden whitespace-nowrap">
                 {files.join(', ')}
             </p>

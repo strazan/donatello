@@ -9,7 +9,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <div className="h-full min-h-screen flex flex-col">
             <Menubar />
             <div className="flex relative w-full grow">
-                <SideBar open={sideOpen} setOpen={setSidebarOpen} />
+                <SideBar />
                 <MainFrame setSidebarOpen={setSidebarOpen}>
                     {children}
                 </MainFrame>

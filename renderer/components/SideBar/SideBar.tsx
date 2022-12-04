@@ -1,4 +1,4 @@
-import { ArrowDownOnSquareIcon } from '@heroicons/react/24/outline'
+import { ArrowDownOnSquareIcon, BoltIcon } from '@heroicons/react/24/outline'
 import classNames from 'classnames'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
@@ -8,6 +8,11 @@ export default function SideBar() {
 
     const navigation = [
         {
+            name: 'Overview',
+            href: '/',
+            icon: BoltIcon,
+        },
+        {
             name: 'Download Manager',
             href: '/download-manager',
             icon: ArrowDownOnSquareIcon,
@@ -15,7 +20,7 @@ export default function SideBar() {
     ]
 
     return (
-        <div className="flex w-64 flex-col bg-uiSurface">
+        <div className="flex w-52 flex-col bg-uiSurface">
             <div className="flex flex-grow flex-col overflow-y-auto border-r border-outline1 ">
                 <div className="flex flex-shrink-0 items-center px-4 pt-4">
                     <img
@@ -32,17 +37,14 @@ export default function SideBar() {
                                 href={item.href}
                                 className={classNames(
                                     item.href === pathname
-                                        ? 'bg-containerActive text-primaryText'
-                                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-                                    'group rounded-md py-2 px-2 flex items-center text-sm font-regular'
+                                        ? 'bg-primaryContainer text-onPrimaryContainer'
+                                        : 'text-primaryText hover:bg-containerHover',
+                                    'group rounded-md py-2 px-2 flex items-center text-xs font-regular'
                                 )}
                             >
                                 <item.icon
                                     className={classNames(
-                                        item.href === pathname
-                                            ? 'text-blue-500'
-                                            : 'text-blue-400 group-hover:text-gray-500',
-                                        'mr-3 flex-shrink-0 h-5 w-5'
+                                        'mr-3 flex-shrink-0 h-4 w-4'
                                     )}
                                     aria-hidden="true"
                                 />
