@@ -1,4 +1,8 @@
-import { ArrowDownOnSquareIcon, BoltIcon } from '@heroicons/react/24/outline'
+import {
+    ArrowDownOnSquareIcon,
+    Battery100Icon,
+    BoltIcon,
+} from '@heroicons/react/24/outline'
 import classNames from 'classnames'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
@@ -15,6 +19,16 @@ export default function SideBar() {
         {
             name: 'Download Manager',
             href: '/download-manager',
+            icon: ArrowDownOnSquareIcon,
+        },
+        {
+            name: 'Battery',
+            href: '/battery ',
+            icon: Battery100Icon,
+        },
+        {
+            name: 'Space',
+            href: '/space',
             icon: ArrowDownOnSquareIcon,
         },
     ]
